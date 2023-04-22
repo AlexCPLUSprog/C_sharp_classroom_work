@@ -100,7 +100,7 @@ namespace C_sharp_classroom_work
         static void Main(string[] args)
         {
             // Задача 1. Четырехзначное число задом наперёд
-            /* Console.WriteLine("Задание 1.\nВведите четырехзначное число: ");           
+             Console.WriteLine("Задание 1.\nВведите четырехзначное число: ");           
              string input = Console.ReadLine();
              for (int i = input.Length - 1; i >= 0; i--)
              {
@@ -130,10 +130,10 @@ namespace C_sharp_classroom_work
                      Console.WriteLine("Некоректный ввод");
                  }   
              }
-             Console.WriteLine();*/
+             Console.WriteLine();
 
             // Задача 3. Работа со временем
-            /*Console.WriteLine("Задание 3.");
+            Console.WriteLine("Задание 3.");
             ConsoleKeyInfo key;
             Console.WriteLine("Нажмите ENTER, чтобы начать забег по кругу, для выхода нажмите SPACE");
             do
@@ -159,17 +159,19 @@ namespace C_sharp_classroom_work
                     default: Console.WriteLine("Неправильная клавиша"); break;
 
                 }
-            } while (key.Key != ConsoleKey.Spacebar);*/
+            } while (key.Key != ConsoleKey.Spacebar);
 
             // Задача 4,5. Показания счетчика
             Console.WriteLine("Задание 4.\n");
+
+            // Сразу напишу, что проверку и ввод данных я не сделал, что-то мне очень тяжко, а время к концу подходит
+
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             DateTime dt = DateTime.Now;
 
             path += "\\" + dt.ToString("Показания счетчиков за dd_MM_yy - HH_mm_ss") + ".txt";
             Console.WriteLine(path);
-            var streamWriter = new StreamWriter(path);         
-
+            var streamWriter = new StreamWriter(path);            
            
             int[,] counterArr = new int[,] { { 12, 10 }, { 13, 11 }, { 14, 13 }, { 15, 21 }, { 16, 22 }, { 17, 23 }, { 18, 24 }, { 19, 25 }, { 20, 24 }, { 21, 25 }, { 22, 26 }, { 23, 27 }, { 24, 28 }, { 25, 28 } };
             int _row = counterArr.GetUpperBound(0);
@@ -179,24 +181,6 @@ namespace C_sharp_classroom_work
             int sum = 0;
             int _month = 1;
             string myMonth = Enum.GetName(typeof(Month), _month);
-            // bool fail = true;
-
-           /* for (int i = 0; i < _month; i++)
-            {
-                try
-                {
-                    Console.WriteLine($"Введите показания счетчиков холодной и горячей воды за {myMonth} -> ");
-
-                    _month++;
-
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-            }     */                
-           
 
             _month = 1;
 
@@ -216,6 +200,7 @@ namespace C_sharp_classroom_work
                     }
                     sum += counterArr[i, j];
                 }
+
                 Console.WriteLine($"Попытка добавить значение холодной воды -> \"{_cold}\" и горячей воды -> \"{_hot}\"");
                 if (_meterReader.addMetric(_cold, _hot))
                 {
@@ -226,9 +211,7 @@ namespace C_sharp_classroom_work
                     Console.WriteLine($"Значения холодной \"{_cold}\" и горячей \"{_hot}\" воды не были добавлены");
                 }
                 Console.WriteLine();
-            }
-
-            
+            }            
             
             _meterReader.getValues().RemoveAt(0);
 
