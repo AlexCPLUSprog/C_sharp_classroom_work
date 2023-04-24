@@ -119,7 +119,7 @@ namespace C_sharp_classroom_work
             }
             else
             {
-                Console.WriteLine("Показания не могут быть меньше предыдущих!!");
+                Console.WriteLine("Показания не могут быть меньше предыдущих");
             }
             return result;
         }
@@ -135,7 +135,7 @@ namespace C_sharp_classroom_work
         static void Main(string[] args)
         {
             // Задача 1. Четырехзначное число задом наперёд
-             Console.WriteLine("Задание 1.\nВведите четырехзначное число: ");           
+            /* Console.WriteLine("Задание 1.\nВведите четырехзначное число: ");           
              string input = Console.ReadLine();
              for (int i = input.Length - 1; i >= 0; i--)
              {
@@ -194,12 +194,12 @@ namespace C_sharp_classroom_work
                     default: Console.WriteLine("Неправильная клавиша"); break;
 
                 }
-            } while (key.Key != ConsoleKey.Spacebar);
+            } while (key.Key != ConsoleKey.Spacebar);*/
 
             // Задача 4,5. Показания счетчика
             Console.WriteLine("Задание 4.\n");
 
-            // Сразу напишу, что проверку и ввод данных я не сделал, что-то мне очень тяжко, а время к концу подходит
+            // Проверка особо пока не выходит, но вдруг еще успею что-нибудь придумать)
 
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             DateTime dt = DateTime.Now;
@@ -207,8 +207,8 @@ namespace C_sharp_classroom_work
             path += "\\" + dt.ToString("Показания счетчиков за dd_MM_yy - HH_mm_ss") + ".txt";
             Console.WriteLine(path);
             var streamWriter = new StreamWriter(path);
-
-            int[,] counterArr = new int[,] { { 12, 10 }, { 13, 11 }, { 14, 13 }, { 15, 21 }, { 16, 22 }, { 17, 23 }, { 18, 24 }, { 19, 25 }, { 20, 24 }, { 21, 25 }, { 22, 26 }, { 23, 27 }, { 24, 28 }, { 25, 28 } };
+            
+            int[,] counterArr = new int[12, 2];
             int _row = counterArr.GetUpperBound(0);
             int _column = counterArr.Length / _row;
             int _cold = 0, _hot = 0, sumcold = 0, sumhot = 0;
@@ -225,14 +225,18 @@ namespace C_sharp_classroom_work
                 {
                     if (j % 2 == 0)
                     {
+                       
+                        Console.Write("Холодная вода = ");
+                        counterArr[i, j] = int.Parse(Console.ReadLine());
                         _cold = counterArr[i, j];
-                        Console.Write("Холодная вода = " + counterArr[i, j] + ", ");
                         sumcold += counterArr[i, j];
                     }
                     else
                     {
+                       
+                        Console.Write("Горячая вода = ");
+                        counterArr[i, j] = int.Parse(Console.ReadLine());
                         _hot = counterArr[i, j];
-                        Console.Write("Горячая вода = " + counterArr[i, j] + ".\n");
                         sumhot += counterArr[i, j];
                     }
 
