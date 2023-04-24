@@ -22,27 +22,55 @@ namespace C_sharp_classroom_work
         Ноябрь,
         Декабрь
     }
-    class myMeterReader
+    class MeterReaderCold
     {
-        int waterCount;
-        public int WaterCount
+        int ColdwaterCount;
+        public int ColdWaterCount
         {
             get
             {
-                return waterCount;
+                return ColdwaterCount;
             }
             set
             {
-                waterCount = value;
+                ColdwaterCount = value;
             }
         }
-        public myMeterReader(int _number)
+        public MeterReaderCold(int _ColdwaterCount)
         {
-            waterCount = _number;
+            ColdwaterCount = _ColdwaterCount;
         }
-        public string convert2Str()
+        public string convertStrCold()
         {
-            string _tmp = waterCount.ToString();
+            string _tmp = ColdwaterCount.ToString();
+            while (_tmp.Length < 8)
+            {
+                _tmp = "0" + _tmp;
+            }
+            return _tmp;
+        }
+    }
+    class MeterReaderHot
+    {
+        int HotwaterCount;
+        public int HotWaterCount
+        {
+            get
+            {
+                return HotwaterCount;
+            }
+            set
+            {
+                HotwaterCount = value;
+            }
+        }
+        public MeterReaderHot(int _HotWaterCount)
+        {
+            HotWaterCount = _HotWaterCount;
+        }
+        public string convertStrHot()
+        {
+            string _tmp = HotwaterCount.ToString();
             while (_tmp.Length < 8)
             {
                 _tmp = "0" + _tmp;
@@ -52,49 +80,56 @@ namespace C_sharp_classroom_work
     }
     struct MeterReader
     {
-        public myMeterReader Cold;
-        public myMeterReader Hot;
+        public MeterReaderCold cold;
+        public MeterReaderHot hot;
     }
     class myCounter
     {
         int _min = 0, _max = 99999999;
-        List<MeterReader> myBillList = new List<MeterReader>();
+        List<MeterReader> myList = new List<MeterReader>();
+
         public myCounter(int _cold, int _hot)
         {
             if (_cold >= _min || _cold <= _max)
             {
                 if (_hot >= _min || _hot <= _max)
                 {
-                    MeterReader myMR02;
-                    myMR02.Cold = new myMeterReader(_cold);
-                    myMR02.Hot = new myMeterReader(_hot);
-                    myBillList.Add(myMR02);
+                    MeterReader mystruct;
+                    mystruct.cold = new MeterReaderCold(_cold);
+                    mystruct.hot = new MeterReaderHot(_hot);
+                    myList.Add(mystruct);
                 }
             }
         }
-        public bool addMetric(int _cold, int _hot)
+        public bool addMetric(int numcold, int numhot)
         {
             bool result = false;
-            int _lastElement = myBillList.Count;
-            if (myBillList[_lastElement - 1].Cold.WaterCount <= _cold)
+            int _lastElement = myList.Count;
+            if (myList[_lastElement - 1].cold.ColdWaterCount <= numcold)
             {
-                if (myBillList[_lastElement - 1].Hot.WaterCount <= _hot)
+                if (myList[_lastElement - 1].hot.HotWaterCount <= numhot)
                 {
-                    MeterReader myMR02;
-                    myMR02.Cold = new myMeterReader(_cold);
-                    myMR02.Hot = new myMeterReader(_hot);
-                    myBillList.Add(myMR02);
+                    MeterReader mystruct;
+                    mystruct.cold = new MeterReaderCold(numcold);
+                    mystruct.hot = new MeterReaderHot(numhot);
+                    myList.Add(mystruct);
                     result = true;
                 }
 
+            }
+            else
+            {
+                Console.WriteLine("Показания не могут быть меньше предыдущих!!");
             }
             return result;
         }
         public List<MeterReader> getValues()
         {
-            return myBillList;
+            return myList;
         }
     }
+
+
     internal class Program
     {
         static void Main(string[] args)
@@ -171,14 +206,14 @@ namespace C_sharp_classroom_work
 
             path += "\\" + dt.ToString("Показания счетчиков за dd_MM_yy - HH_mm_ss") + ".txt";
             Console.WriteLine(path);
-            var streamWriter = new StreamWriter(path);            
-           
+            var streamWriter = new StreamWriter(path);
+
             int[,] counterArr = new int[,] { { 12, 10 }, { 13, 11 }, { 14, 13 }, { 15, 21 }, { 16, 22 }, { 17, 23 }, { 18, 24 }, { 19, 25 }, { 20, 24 }, { 21, 25 }, { 22, 26 }, { 23, 27 }, { 24, 28 }, { 25, 28 } };
             int _row = counterArr.GetUpperBound(0);
             int _column = counterArr.Length / _row;
-            int _cold = 0, _hot = 0;
+            int _cold = 0, _hot = 0, sumcold = 0, sumhot = 0;
             myCounter _meterReader = new myCounter(0, 0);
-            int sum = 0;
+
             int _month = 1;
             string myMonth = Enum.GetName(typeof(Month), _month);
 
@@ -191,14 +226,16 @@ namespace C_sharp_classroom_work
                     if (j % 2 == 0)
                     {
                         _cold = counterArr[i, j];
-                        Console.Write("Холодная вода = " + counterArr[i, j] + ", ");                        
+                        Console.Write("Холодная вода = " + counterArr[i, j] + ", ");
+                        sumcold += counterArr[i, j];
                     }
                     else
                     {
                         _hot = counterArr[i, j];
-                        Console.Write("Горячая вода = " + counterArr[i, j] + ".\n");                        
+                        Console.Write("Горячая вода = " + counterArr[i, j] + ".\n");
+                        sumhot += counterArr[i, j];
                     }
-                    sum += counterArr[i, j];
+
                 }
 
                 Console.WriteLine($"Попытка добавить значение холодной воды -> \"{_cold}\" и горячей воды -> \"{_hot}\"");
@@ -211,23 +248,23 @@ namespace C_sharp_classroom_work
                     Console.WriteLine($"Значения холодной \"{_cold}\" и горячей \"{_hot}\" воды не были добавлены");
                 }
                 Console.WriteLine();
-            }            
-            
+            }
+
             _meterReader.getValues().RemoveAt(0);
 
             {
                 foreach (var item in _meterReader.getValues())
                 {
                     myMonth = Enum.GetName(typeof(Month), _month);
-                    Console.WriteLine($"За {myMonth} \t Холодная = {item.Cold.convert2Str()}, Горячая = {item.Hot.convert2Str()}");
-                    streamWriter.WriteLine($"За {myMonth} \t Холодная = {item.Cold.convert2Str()}, Горячая = {item.Hot.convert2Str()}");
+                    Console.WriteLine($"За {myMonth} \t Холодная = {item.cold.convertStrCold()}, Горячая = {item.hot.convertStrHot()}");
+                    streamWriter.WriteLine($"За {myMonth} \t Холодная = {item.cold.convertStrCold()}, Горячая = {item.hot.convertStrHot()}");
                     _month++;
                 }
             }
-            streamWriter.WriteLine($"\nИтого: {sum}");
-            Console.WriteLine($"\nИтого: {sum}");
+            streamWriter.WriteLine($"\nИтого:\nХолодная  вода: {sumcold}\nГорячая вода: {sumhot}");
+            Console.WriteLine($"\nИтого:\nХолодная  вода: {sumcold}\nГорячая вода: {sumhot}");
 
-            streamWriter.Close();            
+            streamWriter.Close();
 
 
         }
